@@ -13,7 +13,7 @@ Avansert ruteplanner for Norges 17 nasjonale turistveier.
 
 ## 🚀 Bruk
 
-1. Besøk [https://DITT-BRUKERNAVN.github.io/motorcycle-route-planner/](https://DITT-BRUKERNAVN.github.io/motorcycle-route-planner/)
+1. Besøk [https://DITT-BRUKERNAVN.github.io/motorcycle-route-planner/](https://pjerra.github.io/driveplan/)
 2. Last opp GPX-filer for turistveier
 3. Klikk på ruter for å zoome
 4. Aktiver redigeringsmodus for å legge til omveier
