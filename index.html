@@ -841,6 +841,219 @@
             margin-bottom: 0;
             background: #dc3545;
         }
+
+        /* POI Toggle buttons */
+        .poi-toggles {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .poi-toggles h4 {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .poi-toggle-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .poi-toggle {
+            padding: 6px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            background: white;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            width: auto;
+            margin-bottom: 0;
+            color: #495057;
+            font-weight: 500;
+        }
+        .poi-toggle.active {
+            border-color: #28a745;
+            background: #d4edda;
+            color: #155724;
+        }
+
+        /* Elevation chart */
+        .elevation-chart {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .elevation-chart h4 {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .elevation-chart canvas {
+            width: 100%;
+            height: 120px;
+            border-radius: 4px;
+            background: white;
+        }
+        .elevation-chart .elev-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 6px;
+        }
+
+        /* Curvature legend */
+        .curvature-legend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+        .curvature-bar {
+            height: 8px;
+            flex: 1;
+            border-radius: 4px;
+            background: linear-gradient(to right, #28a745, #ffc107, #dc3545);
+        }
+
+        /* Day stage markers */
+        .day-stages {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .day-stages h4 {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .day-stage-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 12px;
+            border-left: 3px solid #667eea;
+        }
+        .day-stage-item .stage-label {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        .day-stage-item .stage-info {
+            color: #6c757d;
+        }
+
+        /* Drag and drop */
+        .route-card.drag-over {
+            border-color: #667eea;
+            border-style: dashed;
+            background: #e8f0fe;
+        }
+        .route-card.dragging {
+            opacity: 0.5;
+        }
+        .route-card .drag-handle {
+            cursor: grab;
+            color: #adb5bd;
+            font-size: 16px;
+            padding: 0 4px;
+            user-select: none;
+        }
+        .route-card .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        /* Share panel */
+        .share-panel {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .share-panel h4 {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .share-panel .share-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .share-panel button {
+            flex: 1;
+            padding: 10px;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        /* Import panel */
+        .import-panel {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 2px dashed #667eea;
+        }
+        .import-panel h4 {
+            font-size: 13px;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .import-panel input[type="text"] {
+            display: block;
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 8px;
+            font-family: inherit;
+        }
+        .import-panel input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .import-panel button {
+            padding: 10px;
+            font-size: 13px;
+            margin-bottom: 0;
+        }
+
+        /* Reverse button */
+        .reverse-btn {
+            background: none;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 4px 8px;
+            color: #6c757d;
+            transition: all 0.2s;
+            width: auto;
+            margin-bottom: 0;
+            line-height: 1;
+        }
+        .reverse-btn:hover {
+            background: #e9ecef;
+            color: #2c3e50;
+        }
+        .reverse-btn:active {
+            transform: scale(0.9);
+        }
+
+        /* Leaflet layer control styling */
+        .leaflet-control-layers {
+            border-radius: 8px !important;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
+        }
     </style>
 </head>
 <body>
@@ -886,6 +1099,12 @@
                 <button class="new-route-btn" onclick="openRouteCreation()">+ Ny rute</button>
             </div>
 
+            <div class="import-panel">
+                <h4>🌍 Importer fra Google Maps</h4>
+                <input type="text" id="googleMapsUrl" placeholder="Lim inn Google Maps-lenke...">
+                <button onclick="importFromGoogleMaps()">Importer rute</button>
+            </div>
+
             <div id="routeCreationPanel" class="route-creation-panel">
                 <h3>🛣️ Opprett ny rute</h3>
                 <input type="text" id="newRouteName" class="route-name-input" placeholder="Rutenavn (valgfritt)">
@@ -917,6 +1136,16 @@
 
             <div id="routesList"></div>
 
+            <div class="poi-toggles" id="poiToggles">
+                <h4>📍 Vis langs ruten</h4>
+                <div class="poi-toggle-row">
+                    <button class="poi-toggle" data-poi="fuel" onclick="togglePOI('fuel')">⛽ Bensin</button>
+                    <button class="poi-toggle" data-poi="viewpoint" onclick="togglePOI('viewpoint')">🏔️ Utsikt</button>
+                    <button class="poi-toggle" data-poi="parking" onclick="togglePOI('parking')">🅿️ Raste</button>
+                    <button class="poi-toggle" data-poi="attraction" onclick="togglePOI('attraction')">⭐ Severdighet</button>
+                </div>
+            </div>
+
             <div id="stats" class="stats">
                 <div class="stats-row">
                     <span class="stats-label">Aktive ruter:</span>
@@ -929,6 +1158,46 @@
                 <div class="stats-row">
                     <span class="stats-label">GPS-punkter:</span>
                     <span class="stats-value" id="totalPoints">0</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">Estimert kjøretid:</span>
+                    <span class="stats-value" id="totalDuration">-</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">Total distanse:</span>
+                    <span class="stats-value" id="totalDistance">-</span>
+                </div>
+                <div class="stats-row">
+                    <span class="stats-label">Svingete-score:</span>
+                    <span class="stats-value" id="curvatureScore">-</span>
+                </div>
+                <div class="curvature-legend" id="curvatureLegend" style="display:none;">
+                    <span>Rett</span>
+                    <div class="curvature-bar"></div>
+                    <span>Svingete</span>
+                </div>
+            </div>
+
+            <div id="elevationChart" class="elevation-chart" style="display:none;">
+                <h4>📈 Høydeprofil</h4>
+                <canvas id="elevationCanvas"></canvas>
+                <div class="elev-stats">
+                    <span id="elevMin">Min: -</span>
+                    <span id="elevMax">Maks: -</span>
+                    <span id="elevGain">Stigning: -</span>
+                </div>
+            </div>
+
+            <div id="dayStages" class="day-stages" style="display:none;">
+                <h4>🏕️ Dagsetapper (~300 km/dag)</h4>
+                <div id="dayStagesList"></div>
+            </div>
+
+            <div class="share-panel">
+                <h4>🔗 Del rute</h4>
+                <div class="share-actions">
+                    <button onclick="shareRouteLink()">Kopier lenke</button>
+                    <button onclick="shareGPXClipboard()" class="secondary">Kopier GPX</button>
                 </div>
             </div>
 
@@ -1016,10 +1285,31 @@
             tapTolerance: 15 // Større tolerance for mobile
         }).setView([65, 13], 5);
         
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors',
+        // Kartlag
+        const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors',
             maxZoom: 18
-        }).addTo(map);
+        });
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '&copy; Esri',
+            maxZoom: 18
+        });
+        const terrainLayer = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenTopoMap',
+            maxZoom: 17
+        });
+        const kartverketLayer = L.tileLayer('https://cache.kartverket.no/v1/wmts/1.0.0/topo/default/webmercator/{z}/{y}/{x}.png', {
+            attribution: '&copy; Kartverket',
+            maxZoom: 18
+        });
+
+        osmLayer.addTo(map);
+        L.control.layers({
+            'OpenStreetMap': osmLayer,
+            'Satellitt (Esri)': satelliteLayer,
+            'Terreng': terrainLayer,
+            'Kartverket Topo': kartverketLayer
+        }, null, { position: 'topright' }).addTo(map);
 
         // Flytt zoom controls på mobil
         if (isMobile) {
@@ -1097,14 +1387,47 @@
         function displayRoutes() {
             const listDiv = document.getElementById('routesList');
             listDiv.innerHTML = '';
-            
+
             routes.forEach((route, index) => {
                 const card = document.createElement('div');
                 const hasDetours = route.detours && route.detours.length > 0;
                 card.className = 'route-card ' + (route.active ? 'active' : 'inactive') + (hasDetours ? ' has-detours' : '');
-                
+
+                // Drag and drop
+                card.draggable = true;
+                card.dataset.index = index;
+                card.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('text/plain', index);
+                    card.classList.add('dragging');
+                });
+                card.addEventListener('dragend', () => {
+                    card.classList.remove('dragging');
+                    document.querySelectorAll('.route-card.drag-over').forEach(c => c.classList.remove('drag-over'));
+                });
+                card.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    card.classList.add('drag-over');
+                });
+                card.addEventListener('dragleave', () => {
+                    card.classList.remove('drag-over');
+                });
+                card.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    card.classList.remove('drag-over');
+                    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'));
+                    const toIndex = index;
+                    if (fromIndex !== toIndex) {
+                        const [moved] = routes.splice(fromIndex, 1);
+                        routes.splice(toIndex, 0, moved);
+                        displayRoutes();
+                        updateStats();
+                        showRoutesOnMap();
+                        saveState();
+                    }
+                });
+
                 card.onclick = (e) => {
-                    if (e.target.classList.contains('route-toggle') || e.target.classList.contains('detour-delete')) {
+                    if (e.target.classList.contains('route-toggle') || e.target.classList.contains('detour-delete') || e.target.classList.contains('reverse-btn')) {
                         return;
                     }
                     zoomToRoute(index);
@@ -1112,7 +1435,7 @@
                         closeSidebar();
                     }
                 };
-                
+
                 let detoursHTML = '';
                 if (hasDetours) {
                     detoursHTML = '<div class="detour-list"><div style="font-size:11px; font-weight:600; margin-bottom:5px; color:#ffc107;">🔀 Omveier:</div>';
@@ -1129,11 +1452,13 @@
                     });
                     detoursHTML += '</div>';
                 }
-                
+
                 card.innerHTML = `
                     <div class="route-header">
+                        <span class="drag-handle" title="Dra for å endre rekkefølge">☰</span>
                         <span class="route-number">${index + 1}</span>
                         <span class="route-name">${route.name}</span>
+                        <button class="reverse-btn" onclick="event.stopPropagation(); reverseRoute(${index})" title="Reverser rute">↕</button>
                         <div class="route-toggle ${route.active ? 'active' : ''}" onclick="event.stopPropagation(); toggleRoute(${index})"></div>
                     </div>
                     <div style="font-size:12px; color:#6c757d;">${route.points.length.toLocaleString()} punkter${hasDetours ? ' • ' + route.detours.length + ' omvei(er)' : ''}</div>
@@ -1186,10 +1511,43 @@
             const totalPoints = activeRoutes.reduce((sum, r) => sum + r.points.length, 0);
             const totalDetours = routes.reduce((sum, r) => sum + (r.detours ? r.detours.length : 0), 0) +
                                connections.reduce((sum, c) => sum + (c.detours ? c.detours.length : 0), 0);
-            
+
             document.getElementById('activeCount').textContent = activeRoutes.length + ' / ' + routes.length;
             document.getElementById('totalPoints').textContent = totalPoints.toLocaleString();
             document.getElementById('detourCount').textContent = totalDetours;
+
+            // Total duration from connections
+            const connDuration = connections.reduce((sum, c) => sum + (c.duration || 0), 0);
+            if (connDuration > 0) {
+                const hours = Math.floor(connDuration / 60);
+                const mins = connDuration % 60;
+                let durationText = hours > 0 ? `${hours} t ${mins} min` : `${mins} min`;
+                const breaks = Math.floor(connDuration / 120);
+                if (breaks > 0) durationText += ` (${breaks} pause${breaks > 1 ? 'r' : ''})`;
+                document.getElementById('totalDuration').textContent = durationText;
+            } else {
+                document.getElementById('totalDuration').textContent = '-';
+            }
+
+            // Total distance
+            const connDistance = connections.reduce((sum, c) => sum + (c.distance || 0), 0);
+            if (connDistance > 0) {
+                document.getElementById('totalDistance').textContent = connDistance.toFixed(0) + ' km';
+            } else {
+                document.getElementById('totalDistance').textContent = '-';
+            }
+
+            // Curvature score
+            const allActivePoints = activeRoutes.flatMap(r => r.points);
+            if (allActivePoints.length > 10) {
+                const score = getCurvatureScore(allActivePoints);
+                const normalizedScore = Math.min(score / allActivePoints.length * 100, 100).toFixed(0);
+                document.getElementById('curvatureScore').textContent = normalizedScore + ' / 100';
+                document.getElementById('curvatureLegend').style.display = 'flex';
+            } else {
+                document.getElementById('curvatureScore').textContent = '-';
+                document.getElementById('curvatureLegend').style.display = 'none';
+            }
         }
 
         function showRoutesOnMap() {
@@ -1641,7 +1999,8 @@
                     } else {
                         let routePoints = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
                         const distance = (data.routes[0].distance / 1000).toFixed(1);
-                        return { points: routePoints, distance: parseFloat(distance) };
+                        const duration = Math.round(data.routes[0].duration / 60);
+                        return { points: routePoints, distance: parseFloat(distance), duration: duration };
                     }
                 }
             } catch (error) {
@@ -1688,13 +2047,14 @@
                 
                 if (routeData) {
                     let selectedRoute = Array.isArray(routeData) ? routeData[0] : routeData;
-                    
+
                     connections.push({
                         from: prev,
                         to: curr,
                         routePoints: selectedRoute.points,
                         originalPoints: [...selectedRoute.points],
                         distance: selectedRoute.distance,
+                        duration: selectedRoute.duration || 0,
                         detours: [],
                         alternativeRoutes: Array.isArray(routeData) ? routeData : [routeData]
                     });
@@ -1754,6 +2114,11 @@
             document.getElementById('downloadBtn').disabled = false;
             document.getElementById('generateBtn').disabled = false;
             saveState();
+
+            // Trigger analysis after route generation
+            fetchElevationProfile();
+            calculateDayStages();
+            showCurvatureOverlay();
         }
 
         function buildGPX(activeRoutes, connections) {
@@ -2133,6 +2498,509 @@
         }
 
         // =============================================
+        // Reversér rute
+        // =============================================
+        function reverseRoute(index) {
+            const route = routes[index];
+            route.points.reverse();
+            route.originalPoints.reverse();
+            const tmp = route.start;
+            route.start = route.end;
+            route.end = tmp;
+            route.detours = [];
+            displayRoutes();
+            updateStats();
+            showRoutesOnMap();
+            saveState();
+        }
+
+        // =============================================
+        // Overpass API
+        // =============================================
+        async function queryOverpass(query) {
+            const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
+            try {
+                const response = await fetch(url);
+                return await response.json();
+            } catch (e) {
+                console.error('Overpass error:', e);
+                return null;
+            }
+        }
+
+        // =============================================
+        // POI-markører
+        // =============================================
+        let poiState = { fuel: false, viewpoint: false, parking: false, attraction: false };
+        let poiLayerGroups = { fuel: L.layerGroup(), viewpoint: L.layerGroup(), parking: L.layerGroup(), attraction: L.layerGroup() };
+
+        function togglePOI(type) {
+            poiState[type] = !poiState[type];
+            const btn = document.querySelector(`.poi-toggle[data-poi="${type}"]`);
+            btn.classList.toggle('active', poiState[type]);
+
+            if (poiState[type]) {
+                fetchPOIs(type);
+            } else {
+                poiLayerGroups[type].clearLayers();
+                map.removeLayer(poiLayerGroups[type]);
+            }
+        }
+
+        async function fetchPOIs(type) {
+            const activeRoutes = routes.filter(r => r.active);
+            if (activeRoutes.length === 0) return;
+
+            const allPoints = activeRoutes.flatMap(r => r.points);
+            const samplePoints = compressPoints(allPoints, 20);
+
+            const tagMap = {
+                fuel: '"amenity"="fuel"',
+                viewpoint: '"tourism"="viewpoint"',
+                parking: '"amenity"="parking"',
+                attraction: '"tourism"="attraction"'
+            };
+
+            const iconMap = {
+                fuel: '⛽',
+                viewpoint: '🏔️',
+                parking: '🅿️',
+                attraction: '⭐'
+            };
+
+            const aroundClauses = samplePoints.map(p => `(around:5000,${p[0]},${p[1]})`).join('');
+            const query = `[out:json][timeout:25];(node[${tagMap[type]}]${aroundClauses};);out body 100;`;
+
+            const data = await queryOverpass(query);
+            if (!data || !data.elements) return;
+
+            poiLayerGroups[type].clearLayers();
+
+            data.elements.forEach(el => {
+                if (!el.lat || !el.lon) return;
+                const marker = L.marker([el.lat, el.lon], {
+                    icon: L.divIcon({
+                        className: 'custom-marker',
+                        html: `<div style="font-size:18px; text-align:center; line-height:1;">${iconMap[type]}</div>`,
+                        iconSize: [24, 24],
+                        iconAnchor: [12, 12]
+                    })
+                });
+                const name = el.tags?.name || type;
+                marker.bindPopup(`<strong>${iconMap[type]} ${name}</strong>`);
+                poiLayerGroups[type].addLayer(marker);
+            });
+
+            poiLayerGroups[type].addTo(map);
+        }
+
+        // =============================================
+        // Kurvatur-beregning
+        // =============================================
+        function calculateBearing(p1, p2) {
+            const lat1 = p1[0] * Math.PI / 180;
+            const lat2 = p2[0] * Math.PI / 180;
+            const dLon = (p2[1] - p1[1]) * Math.PI / 180;
+            const y = Math.sin(dLon) * Math.cos(lat2);
+            const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
+            return Math.atan2(y, x) * 180 / Math.PI;
+        }
+
+        function getCurvatureScore(points) {
+            if (points.length < 3) return 0;
+            const sampled = compressPoints(points, Math.min(points.length, 500));
+            let totalAngleChange = 0;
+            for (let i = 2; i < sampled.length; i++) {
+                const b1 = calculateBearing(sampled[i - 2], sampled[i - 1]);
+                const b2 = calculateBearing(sampled[i - 1], sampled[i]);
+                let diff = Math.abs(b2 - b1);
+                if (diff > 180) diff = 360 - diff;
+                totalAngleChange += diff;
+            }
+            return totalAngleChange;
+        }
+
+        // Curvature overlay layer
+        let curvatureLayer = null;
+        function showCurvatureOverlay() {
+            if (curvatureLayer) { map.removeLayer(curvatureLayer); curvatureLayer = null; }
+            const activeRoutes = routes.filter(r => r.active);
+            if (activeRoutes.length === 0) return;
+
+            curvatureLayer = L.layerGroup();
+            activeRoutes.forEach(route => {
+                const pts = compressPoints(route.points, 200);
+                for (let i = 2; i < pts.length; i++) {
+                    const b1 = calculateBearing(pts[i - 2], pts[i - 1]);
+                    const b2 = calculateBearing(pts[i - 1], pts[i]);
+                    let diff = Math.abs(b2 - b1);
+                    if (diff > 180) diff = 360 - diff;
+                    // 0=green, 45+=red
+                    const ratio = Math.min(diff / 45, 1);
+                    const r = Math.round(ratio * 220 + 40);
+                    const g = Math.round((1 - ratio) * 160 + 40);
+                    const color = `rgb(${r},${g},60)`;
+                    L.polyline([pts[i - 1], pts[i]], { color: color, weight: 6, opacity: 0.8 }).addTo(curvatureLayer);
+                }
+            });
+            curvatureLayer.addTo(map);
+        }
+
+        // =============================================
+        // Høydeprofil
+        // =============================================
+        async function fetchElevationProfile() {
+            const activeRoutes = routes.filter(r => r.active);
+            if (activeRoutes.length === 0) return;
+
+            const allPoints = activeRoutes.flatMap(r => r.points);
+            const sampled = compressPoints(allPoints, 100);
+
+            const locations = sampled.map(p => ({ latitude: p[0], longitude: p[1] }));
+
+            try {
+                const response = await fetch('https://api.open-elevation.com/api/v1/lookup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ locations: locations })
+                });
+                const data = await response.json();
+                if (data.results) {
+                    const elevations = data.results.map(r => r.elevation);
+                    drawElevationChart(elevations);
+                }
+            } catch (e) {
+                console.error('Elevation error:', e);
+            }
+        }
+
+        function drawElevationChart(elevations) {
+            const container = document.getElementById('elevationChart');
+            const canvas = document.getElementById('elevationCanvas');
+            container.style.display = 'block';
+
+            const ctx = canvas.getContext('2d');
+            const dpr = window.devicePixelRatio || 1;
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * dpr;
+            canvas.height = 120 * dpr;
+            ctx.scale(dpr, dpr);
+
+            const w = rect.width;
+            const h = 120;
+            const min = Math.min(...elevations);
+            const max = Math.max(...elevations);
+            const range = max - min || 1;
+
+            // Background
+            ctx.fillStyle = '#f8f9fa';
+            ctx.fillRect(0, 0, w, h);
+
+            // Fill
+            ctx.beginPath();
+            ctx.moveTo(0, h);
+            elevations.forEach((el, i) => {
+                const x = (i / (elevations.length - 1)) * w;
+                const y = h - ((el - min) / range) * (h - 20) - 10;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.lineTo(w, h);
+            ctx.lineTo(0, h);
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(102, 126, 234, 0.2)';
+            ctx.fill();
+
+            // Line
+            ctx.beginPath();
+            elevations.forEach((el, i) => {
+                const x = (i / (elevations.length - 1)) * w;
+                const y = h - ((el - min) / range) * (h - 20) - 10;
+                if (i === 0) ctx.moveTo(x, y);
+                else ctx.lineTo(x, y);
+            });
+            ctx.strokeStyle = '#667eea';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Stats
+            let gain = 0;
+            for (let i = 1; i < elevations.length; i++) {
+                if (elevations[i] > elevations[i - 1]) gain += elevations[i] - elevations[i - 1];
+            }
+            document.getElementById('elevMin').textContent = `Min: ${Math.round(min)} m`;
+            document.getElementById('elevMax').textContent = `Maks: ${Math.round(max)} m`;
+            document.getElementById('elevGain').textContent = `Stigning: ${Math.round(gain)} m`;
+        }
+
+        // =============================================
+        // Dagsetapper
+        // =============================================
+        let dayStageMarkers = [];
+
+        async function calculateDayStages() {
+            const activeRoutes = routes.filter(r => r.active);
+            if (activeRoutes.length === 0) return;
+
+            const allPoints = activeRoutes.flatMap(r => r.points);
+            if (allPoints.length < 2) return;
+
+            // Calculate cumulative distance
+            let totalDist = 0;
+            const distances = [0];
+            for (let i = 1; i < allPoints.length; i++) {
+                const d = map.distance(
+                    L.latLng(allPoints[i - 1][0], allPoints[i - 1][1]),
+                    L.latLng(allPoints[i][0], allPoints[i][1])
+                );
+                totalDist += d;
+                distances.push(totalDist);
+            }
+
+            const kmPerDay = 300;
+            const totalKm = totalDist / 1000;
+            const numDays = Math.ceil(totalKm / kmPerDay);
+
+            if (numDays <= 1) {
+                document.getElementById('dayStages').style.display = 'none';
+                return;
+            }
+
+            // Find stage end points
+            const stages = [];
+            for (let day = 1; day < numDays; day++) {
+                const targetDist = day * kmPerDay * 1000;
+                let closestIdx = 0;
+                let minDiff = Infinity;
+                for (let i = 0; i < distances.length; i++) {
+                    const diff = Math.abs(distances[i] - targetDist);
+                    if (diff < minDiff) { minDiff = diff; closestIdx = i; }
+                }
+                stages.push({
+                    day: day,
+                    point: allPoints[closestIdx],
+                    km: Math.round(distances[closestIdx] / 1000)
+                });
+            }
+
+            // Show stages
+            const container = document.getElementById('dayStages');
+            const list = document.getElementById('dayStagesList');
+            container.style.display = 'block';
+            list.innerHTML = '';
+
+            // Clear old markers
+            dayStageMarkers.forEach(m => map.removeLayer(m));
+            dayStageMarkers = [];
+
+            stages.forEach((stage, idx) => {
+                const item = document.createElement('div');
+                item.className = 'day-stage-item';
+                item.innerHTML = `
+                    <span class="stage-label">Dag ${stage.day} stopp</span>
+                    <span class="stage-info">${stage.km} km</span>
+                `;
+                item.style.cursor = 'pointer';
+                item.onclick = () => map.setView(stage.point, 12);
+                list.appendChild(item);
+
+                // Map marker
+                const marker = L.marker(stage.point, {
+                    icon: L.divIcon({
+                        className: 'custom-marker',
+                        html: `<div style="background:#667eea; color:white; width:32px; height:32px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:11px;">D${stage.day}</div>`,
+                        iconSize: [32, 32],
+                        iconAnchor: [16, 16]
+                    })
+                }).addTo(map);
+                marker.bindPopup(`<strong>Dag ${stage.day} stopp</strong><br>${stage.km} km fra start`);
+                dayStageMarkers.push(marker);
+            });
+
+            // Final entry
+            const finalItem = document.createElement('div');
+            finalItem.className = 'day-stage-item';
+            finalItem.innerHTML = `
+                <span class="stage-label">Mål (Dag ${numDays})</span>
+                <span class="stage-info">${Math.round(totalKm)} km totalt</span>
+            `;
+            list.appendChild(finalItem);
+        }
+
+        // =============================================
+        // Del rute via lenke
+        // =============================================
+        function shareRouteLink() {
+            if (routes.length === 0) { alert('Ingen ruter å dele.'); return; }
+
+            const shareData = routes.map(r => ({
+                n: r.name,
+                s: [r.start[0], r.start[1]],
+                e: [r.end[0], r.end[1]],
+                a: r.active
+            }));
+
+            try {
+                const json = JSON.stringify(shareData);
+                const encoded = btoa(unescape(encodeURIComponent(json)));
+                const url = window.location.origin + window.location.pathname + '#route=' + encoded;
+
+                if (url.length > 2000) {
+                    // Too long for URL, copy as text
+                    navigator.clipboard.writeText(json).then(() => {
+                        alert('Rute-data kopiert til utklippstavle (for lang for URL).');
+                    });
+                } else {
+                    navigator.clipboard.writeText(url).then(() => {
+                        alert('Lenke kopiert til utklippstavle!');
+                    });
+                }
+            } catch (e) {
+                console.error('Share error:', e);
+                alert('Kunne ikke dele ruten.');
+            }
+        }
+
+        function shareGPXClipboard() {
+            if (finalGPX) {
+                navigator.clipboard.writeText(finalGPX).then(() => {
+                    alert('GPX kopiert til utklippstavle!');
+                });
+            } else {
+                alert('Generer ruten først.');
+            }
+        }
+
+        // Load shared route from URL hash
+        async function loadFromHash() {
+            const hash = window.location.hash;
+            if (!hash.startsWith('#route=')) return false;
+            try {
+                const encoded = hash.substring(7);
+                const json = decodeURIComponent(escape(atob(encoded)));
+                const shareData = JSON.parse(json);
+                if (!Array.isArray(shareData) || shareData.length === 0) return false;
+
+                routes = [];
+                for (const r of shareData) {
+                    const routeData = await getRoute(r.s, r.e);
+                    if (routeData) {
+                        routes.push({
+                            name: r.n,
+                            points: routeData.points,
+                            originalPoints: [...routeData.points],
+                            start: r.s,
+                            end: r.e,
+                            avgLat: (r.s[0] + r.e[0]) / 2,
+                            active: r.a !== false,
+                            detours: []
+                        });
+                    }
+                }
+
+                if (routes.length > 0) {
+                    displayRoutes();
+                    updateStats();
+                    showRoutesOnMap();
+                    document.getElementById('showRoutesBtn').disabled = false;
+                    document.getElementById('editModeBtn').disabled = false;
+                    document.getElementById('generateBtn').disabled = false;
+                    // Zoom to all routes
+                    const allPoints = routes.flatMap(r => r.points);
+                    if (allPoints.length > 0) {
+                        map.fitBounds(L.latLngBounds(allPoints).pad(0.1));
+                    }
+                    return true;
+                }
+            } catch (e) {
+                console.error('Hash load error:', e);
+            }
+            return false;
+        }
+
+        // =============================================
+        // Import fra Google Maps
+        // =============================================
+        async function importFromGoogleMaps() {
+            const urlInput = document.getElementById('googleMapsUrl');
+            const url = urlInput.value.trim();
+            if (!url) { alert('Lim inn en Google Maps-lenke.'); return; }
+
+            let coords = [];
+
+            // Try to parse @lat,lng from URL
+            const centerMatch = url.match(/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+
+            // Try to parse directions: /dir/lat1,lng1/lat2,lng2/...
+            const dirMatch = url.match(/dir\/(.+?)(?:\?|$)/);
+
+            if (dirMatch) {
+                const parts = dirMatch[1].split('/');
+                parts.forEach(part => {
+                    const m = part.match(/^(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+                    if (m) coords.push([parseFloat(m[1]), parseFloat(m[2])]);
+                });
+            }
+
+            // Try place extraction from /place/ URLs
+            if (coords.length === 0) {
+                const placeMatch = url.match(/place\/[^/]*\/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+                if (placeMatch) {
+                    coords.push([parseFloat(placeMatch[1]), parseFloat(placeMatch[2])]);
+                }
+            }
+
+            // Fallback to center point
+            if (coords.length === 0 && centerMatch) {
+                coords.push([parseFloat(centerMatch[1]), parseFloat(centerMatch[2])]);
+            }
+
+            if (coords.length === 0) {
+                alert('Kunne ikke finne koordinater i lenken.');
+                return;
+            }
+
+            if (coords.length === 1) {
+                // Single point - just center map there
+                map.setView(coords[0], 13);
+                L.marker(coords[0]).addTo(map).bindPopup('Importert fra Google Maps').openPopup();
+                urlInput.value = '';
+                return;
+            }
+
+            // Multiple points - create route
+            const start = coords[0];
+            const end = coords[coords.length - 1];
+            const routeData = await getRoute(start, end);
+
+            if (routeData) {
+                const name = 'Google Maps Import';
+                routes.push({
+                    name: name,
+                    points: routeData.points,
+                    originalPoints: [...routeData.points],
+                    start: routeData.points[0],
+                    end: routeData.points[routeData.points.length - 1],
+                    avgLat: routeData.points.reduce((s, p) => s + p[0], 0) / routeData.points.length,
+                    active: true,
+                    detours: []
+                });
+
+                displayRoutes();
+                updateStats();
+                showRoutesOnMap();
+                map.fitBounds(L.latLngBounds(routeData.points).pad(0.1));
+
+                document.getElementById('showRoutesBtn').disabled = false;
+                document.getElementById('editModeBtn').disabled = false;
+                document.getElementById('generateBtn').disabled = false;
+                saveState();
+            }
+
+            urlInput.value = '';
+        }
+
+        // =============================================
         // Funksjon 2: Automatisk lagring (localStorage)
         // =============================================
         function saveState() {
@@ -2160,6 +3028,7 @@
                         routePoints: c.routePoints,
                         originalPoints: c.originalPoints,
                         distance: c.distance,
+                        duration: c.duration || 0,
                         detours: (c.detours || []).map(d => ({
                             splitPoint: d.splitPoint,
                             rejoinPoint: d.rejoinPoint,
@@ -2205,6 +3074,7 @@
                     routePoints: c.routePoints,
                     originalPoints: c.originalPoints,
                     distance: c.distance,
+                    duration: c.duration || 0,
                     detours: c.detours || [],
                     alternativeRoutes: c.alternativeRoutes || []
                 }));
@@ -2259,6 +3129,9 @@
 
         // Last inn lagret tilstand ved oppstart
         loadState();
+
+        // Check for shared route in URL hash
+        loadFromHash();
 
         // Oppdater map størrelse når orientation endres
         window.addEventListener('orientationchange', function() {
