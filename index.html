@@ -705,10 +705,128 @@
             * {
                 touch-action: pan-y pan-x;
             }
-            
+
             button, .route-toggle, .file-label {
                 touch-action: manipulation;
             }
+        }
+
+        /* Ny rute-knapp */
+        .new-route-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            font-weight: 600;
+            border: none;
+            margin-top: 10px;
+            touch-action: manipulation;
+        }
+        .new-route-btn:active { transform: scale(0.98); }
+
+        /* Ruteoppretting-panel */
+        .route-creation-panel {
+            display: none;
+            background: #f8f9fa;
+            border: 2px solid #28a745;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .route-creation-panel.active { display: block; }
+        .route-creation-panel h3 { margin-bottom: 12px; font-size: 16px; color: #2c3e50; }
+
+        .mode-tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+        .mode-tab {
+            flex: 1;
+            padding: 10px 6px;
+            background: #e9ecef;
+            border: 2px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #495057;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+        .mode-tab.active {
+            background: white;
+            border-color: #28a745;
+            color: #28a745;
+        }
+        .mode-tab:active { transform: scale(0.96); }
+
+        .route-name-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-family: inherit;
+        }
+        .route-name-input:focus { outline: none; border-color: #28a745; }
+
+        .creation-instructions {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
+            line-height: 1.5;
+            border-radius: 0 4px 4px 0;
+        }
+
+        .creation-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .creation-actions button {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            margin-bottom: 0;
+        }
+        .creation-actions .cancel-btn {
+            background: #6c757d;
+        }
+
+        .creation-stats {
+            font-size: 12px;
+            color: #6c757d;
+            margin-bottom: 10px;
+        }
+
+        /* Gjenopprettet-melding */
+        .restored-banner {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 0 4px 4px 0;
+            font-size: 13px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .restored-banner button {
+            width: auto;
+            padding: 6px 12px;
+            font-size: 12px;
+            margin-bottom: 0;
+            background: #dc3545;
         }
     </style>
 </head>
@@ -743,10 +861,34 @@
         </div>
         
         <div class="sidebar-content">
+            <div id="restoredBanner" class="restored-banner" style="display:none;">
+                <span>✅ Forrige økt gjenopprettet</span>
+                <button onclick="clearSavedState()">Start på nytt</button>
+            </div>
+
             <div class="file-upload">
                 <label for="gpxFiles" class="file-label">📁 Last opp GPX-filer</label>
                 <input type="file" id="gpxFiles" multiple accept=".gpx">
                 <div id="fileCount" style="margin-top:10px; font-size:13px; color:#6c757d; text-align:center;"></div>
+                <button class="new-route-btn" onclick="openRouteCreation()">+ Ny rute</button>
+            </div>
+
+            <div id="routeCreationPanel" class="route-creation-panel">
+                <h3>🛣️ Opprett ny rute</h3>
+                <input type="text" id="newRouteName" class="route-name-input" placeholder="Rutenavn (valgfritt)">
+                <div class="mode-tabs">
+                    <div class="mode-tab active" data-mode="click" onclick="setCreationMode('click')">📍 Klikk</div>
+                    <div class="mode-tab" data-mode="startend" onclick="setCreationMode('startend')">🏁 Start/Slutt</div>
+                    <div class="mode-tab" data-mode="freehand" onclick="setCreationMode('freehand')">✏️ Frihånd</div>
+                </div>
+                <div id="creationInstructions" class="creation-instructions">
+                    Klikk på kartet for å legge til punkter. Ruten beregnes automatisk mellom hvert punkt via veier.
+                </div>
+                <div id="creationStats" class="creation-stats"></div>
+                <div class="creation-actions">
+                    <button class="cancel-btn" onclick="cancelRouteCreation()">Avbryt</button>
+                    <button class="secondary" id="finishRouteBtn" onclick="finishRouteCreation()" disabled>Ferdig</button>
+                </div>
             </div>
 
             <div class="info-box">
@@ -838,6 +980,7 @@
         let detourLayers = [];
         let detourMarkers = [];
         let editMode = false;
+        let isCreatingRoute = false;
         let selectedRouteForEdit = null;
         let selectedConnectionForEdit = null;
         let clickedPoint = null;
@@ -871,6 +1014,7 @@
         }
 
         map.on('click', function(e) {
+            if (isCreatingRoute) return; // Handled by creation click handler
             if (editMode && (selectedRouteForEdit !== null || selectedConnectionForEdit !== null)) {
                 addDetour(e.latlng);
                 if (isMobile) {
@@ -913,6 +1057,7 @@
             document.getElementById('showRoutesBtn').disabled = false;
             document.getElementById('editModeBtn').disabled = false;
             document.getElementById('generateBtn').disabled = false;
+            saveState();
         });
 
         async function parseGPX(file) {
@@ -996,6 +1141,7 @@
             displayRoutes();
             updateStats();
             showRoutesOnMap();
+            saveState();
         }
 
         function toggleEditMode() {
@@ -1295,10 +1441,11 @@
                 displayRoutes();
                 updateStats();
                 showRoutesOnMap();
-                
+                saveState();
+
                 document.getElementById('editInstructions').innerHTML = '✓ Omvei lagt til!';
             }
-            
+
             resetSelection();
         }
 
@@ -1328,10 +1475,11 @@
                 rebuildConnectionWithDetours(selectedConnectionForEdit);
                 updateStats();
                 showConnectionsOnMap();
-                
+                saveState();
+
                 document.getElementById('editInstructions').innerHTML = '✓ Omvei lagt til!';
             }
-            
+
             resetSelection();
         }
 
@@ -1364,6 +1512,7 @@
                 displayRoutes();
                 updateStats();
                 showRoutesOnMap();
+                saveState();
             }
         }
 
@@ -1380,6 +1529,7 @@
                 rebuildConnectionWithDetours(connIndex);
                 updateStats();
                 showConnectionsOnMap();
+                saveState();
             }
         }
 
@@ -1448,6 +1598,7 @@
             displayRoutes();
             updateStats();
             showRoutesOnMap();
+            saveState();
         }
 
         function compressPoints(points, maxPoints) {
@@ -1588,6 +1739,7 @@
             
             document.getElementById('downloadBtn').disabled = false;
             document.getElementById('generateBtn').disabled = false;
+            saveState();
         }
 
         function buildGPX(activeRoutes, connections) {
@@ -1635,6 +1787,464 @@
                 alert('GPX-fil lastet ned! Sjekk nedlastingsmappen.');
             }
         }
+
+        // =============================================
+        // Funksjon 1: Ny rute-opprettelse
+        // =============================================
+        let creationMode = 'click'; // 'click', 'startend', 'freehand'
+        let creationWaypoints = [];
+        let creationRouteSegments = [];
+        let creationMarkers = [];
+        let creationPolylines = [];
+        let freehandDrawing = false;
+        let freehandPoints = [];
+        let freehandPolyline = null;
+
+        const modeInstructions = {
+            click: 'Klikk på kartet for å legge til punkter. Ruten beregnes automatisk mellom hvert punkt via veier.',
+            startend: 'Klikk på kartet for å sette startpunkt, deretter sluttpunkt. OSRM beregner hele ruten.',
+            freehand: 'Hold museknappen nede og tegn på kartet. Ruten snappes til nærmeste vei når du slipper.'
+        };
+
+        function openRouteCreation() {
+            isCreatingRoute = true;
+            creationWaypoints = [];
+            creationRouteSegments = [];
+            cleanupCreationLayers();
+            document.getElementById('routeCreationPanel').classList.add('active');
+            document.getElementById('finishRouteBtn').disabled = true;
+            document.getElementById('creationStats').textContent = '';
+            document.getElementById('newRouteName').value = '';
+            setCreationMode('click');
+            if (isMobile) closeSidebar();
+        }
+
+        function setCreationMode(mode) {
+            creationMode = mode;
+            document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.mode-tab[data-mode="${mode}"]`).classList.add('active');
+            document.getElementById('creationInstructions').textContent = modeInstructions[mode];
+            // Reset state when switching modes
+            creationWaypoints = [];
+            creationRouteSegments = [];
+            cleanupCreationLayers();
+            document.getElementById('finishRouteBtn').disabled = true;
+            document.getElementById('creationStats').textContent = '';
+
+            // Setup freehand listeners
+            if (mode === 'freehand') {
+                setupFreehandListeners();
+            } else {
+                removeFreehandListeners();
+            }
+        }
+
+        function cleanupCreationLayers() {
+            creationMarkers.forEach(m => map.removeLayer(m));
+            creationPolylines.forEach(p => map.removeLayer(p));
+            creationMarkers = [];
+            creationPolylines = [];
+            if (freehandPolyline) {
+                map.removeLayer(freehandPolyline);
+                freehandPolyline = null;
+            }
+            freehandPoints = [];
+        }
+
+        function cancelRouteCreation() {
+            isCreatingRoute = false;
+            cleanupCreationLayers();
+            removeFreehandListeners();
+            document.getElementById('routeCreationPanel').classList.remove('active');
+        }
+
+        // Map click handler for creation
+        map.on('click', function(e) {
+            if (!isCreatingRoute) return;
+            if (creationMode === 'freehand') return;
+
+            if (creationMode === 'click') {
+                handleClickModeClick(e.latlng);
+            } else if (creationMode === 'startend') {
+                handleStartEndClick(e.latlng);
+            }
+        });
+
+        async function handleClickModeClick(latlng) {
+            creationWaypoints.push(latlng);
+            addCreationMarker(latlng, creationWaypoints.length);
+
+            if (creationWaypoints.length >= 2) {
+                const prev = creationWaypoints[creationWaypoints.length - 2];
+                const curr = creationWaypoints[creationWaypoints.length - 1];
+                document.getElementById('creationInstructions').textContent = '⏳ Beregner vei...';
+                const routeData = await getRoute([prev.lat, prev.lng], [curr.lat, curr.lng]);
+                if (routeData) {
+                    creationRouteSegments.push(routeData.points);
+                    const polyline = L.polyline(routeData.points, {
+                        color: '#28a745', weight: 5, opacity: 0.8
+                    }).addTo(map);
+                    creationPolylines.push(polyline);
+                }
+                document.getElementById('creationInstructions').textContent = modeInstructions.click;
+                updateCreationStats();
+                document.getElementById('finishRouteBtn').disabled = false;
+            }
+        }
+
+        async function handleStartEndClick(latlng) {
+            if (creationWaypoints.length >= 2) return; // Maks 2 punkter i start/slutt-modus
+            creationWaypoints.push(latlng);
+            addCreationMarker(latlng, creationWaypoints.length);
+
+            if (creationWaypoints.length === 1) {
+                document.getElementById('creationInstructions').textContent = 'Klikk nå på sluttpunktet.';
+            } else if (creationWaypoints.length === 2) {
+                document.getElementById('creationInstructions').textContent = '⏳ Beregner rute...';
+                const start = creationWaypoints[0];
+                const end = creationWaypoints[1];
+                const routeData = await getRoute([start.lat, start.lng], [end.lat, end.lng], true);
+
+                if (routeData) {
+                    const routeOptions = Array.isArray(routeData) ? routeData : [routeData];
+                    if (routeOptions.length > 1) {
+                        showCreationAltRoutes(routeOptions);
+                        return; // La showCreationAltRoutes sette instruksjonsteksten
+                    } else {
+                        selectCreationRoute(routeOptions[0]);
+                    }
+                }
+                document.getElementById('creationInstructions').textContent = modeInstructions.startend;
+            }
+        }
+
+        function showCreationAltRoutes(routeOptions) {
+            // Show alternatives on map with different colors
+            const colors = ['#28a745', '#3498db', '#e74c3c'];
+            routeOptions.forEach((opt, i) => {
+                const poly = L.polyline(opt.points, {
+                    color: colors[i % colors.length],
+                    weight: i === 0 ? 6 : 4,
+                    opacity: i === 0 ? 0.9 : 0.5
+                }).addTo(map);
+                poly.bindPopup(`Rute ${i + 1}: ${opt.distance} km, ~${opt.duration} min`);
+                poly.on('click', function(e) {
+                    L.DomEvent.stopPropagation(e);
+                    creationPolylines.forEach(p => map.removeLayer(p));
+                    creationPolylines = [];
+                    selectCreationRoute(opt);
+                });
+                creationPolylines.push(poly);
+            });
+            document.getElementById('creationInstructions').textContent = 'Klikk på en av rutene på kartet for å velge den.';
+        }
+
+        function selectCreationRoute(routeOption) {
+            creationPolylines.forEach(p => map.removeLayer(p));
+            creationPolylines = [];
+            creationRouteSegments = [routeOption.points];
+            const polyline = L.polyline(routeOption.points, {
+                color: '#28a745', weight: 5, opacity: 0.8
+            }).addTo(map);
+            creationPolylines.push(polyline);
+            updateCreationStats();
+            document.getElementById('finishRouteBtn').disabled = false;
+        }
+
+        function addCreationMarker(latlng, number) {
+            const markerSize = isMobile ? 32 : 28;
+            const marker = L.marker(latlng, {
+                icon: L.divIcon({
+                    className: 'custom-marker',
+                    html: `<div style="background:#667eea; color:white; width:${markerSize}px; height:${markerSize}px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px;">${number}</div>`,
+                    iconSize: [markerSize, markerSize],
+                    iconAnchor: [markerSize / 2, markerSize / 2]
+                })
+            }).addTo(map);
+            creationMarkers.push(marker);
+        }
+
+        function updateCreationStats() {
+            const allPoints = creationRouteSegments.flat();
+            if (allPoints.length > 0) {
+                let totalDist = 0;
+                for (let i = 1; i < allPoints.length; i++) {
+                    totalDist += map.distance(L.latLng(allPoints[i - 1][0], allPoints[i - 1][1]), L.latLng(allPoints[i][0], allPoints[i][1]));
+                }
+                document.getElementById('creationStats').textContent =
+                    `${creationWaypoints.length} punkt(er) • ~${(totalDist / 1000).toFixed(1)} km • ${allPoints.length} GPS-punkter`;
+            }
+        }
+
+        // Freehand drawing
+        let _freehandMoveHandler = null;
+        let _freehandUpHandler = null;
+        let _freehandDownHandler = null;
+
+        function setupFreehandListeners() {
+            removeFreehandListeners();
+            const container = map.getContainer();
+            map.dragging.disable();
+
+            _freehandDownHandler = function(e) {
+                if (!isCreatingRoute || creationMode !== 'freehand') return;
+                freehandDrawing = true;
+                freehandPoints = [];
+                const latlng = map.containerPointToLatLng(L.point(e.touches ? e.touches[0].clientX - container.getBoundingClientRect().left : e.clientX - container.getBoundingClientRect().left, e.touches ? e.touches[0].clientY - container.getBoundingClientRect().top : e.clientY - container.getBoundingClientRect().top));
+                freehandPoints.push(latlng);
+                if (freehandPolyline) map.removeLayer(freehandPolyline);
+                freehandPolyline = L.polyline([latlng], { color: '#e74c3c', weight: 3, dashArray: '5,5' }).addTo(map);
+            };
+
+            _freehandMoveHandler = function(e) {
+                if (!freehandDrawing) return;
+                e.preventDefault();
+                const latlng = map.containerPointToLatLng(L.point(e.touches ? e.touches[0].clientX - container.getBoundingClientRect().left : e.clientX - container.getBoundingClientRect().left, e.touches ? e.touches[0].clientY - container.getBoundingClientRect().top : e.clientY - container.getBoundingClientRect().top));
+                freehandPoints.push(latlng);
+                freehandPolyline.addLatLng(latlng);
+            };
+
+            _freehandUpHandler = async function() {
+                if (!freehandDrawing) return;
+                freehandDrawing = false;
+                if (freehandPoints.length < 2) return;
+
+                document.getElementById('creationInstructions').textContent = '⏳ Snapper til vei...';
+
+                // Pick start, end, and some intermediate points
+                const numWaypoints = Math.min(Math.max(Math.floor(freehandPoints.length / 10), 2), 25);
+                const step = (freehandPoints.length - 1) / (numWaypoints - 1);
+                const waypoints = [];
+                for (let i = 0; i < numWaypoints; i++) {
+                    const idx = Math.min(Math.round(i * step), freehandPoints.length - 1);
+                    waypoints.push(freehandPoints[idx]);
+                }
+
+                // Route through OSRM with waypoints
+                const coords = waypoints.map(w => `${w.lng},${w.lat}`).join(';');
+                try {
+                    const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${coords}?overview=full&geometries=geojson`);
+                    const data = await response.json();
+                    if (data.code === 'Ok' && data.routes && data.routes.length > 0) {
+                        const routePoints = data.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+                        if (freehandPolyline) map.removeLayer(freehandPolyline);
+                        freehandPolyline = null;
+
+                        creationRouteSegments = [routePoints];
+                        creationWaypoints = [waypoints[0], waypoints[waypoints.length - 1]];
+
+                        creationPolylines.forEach(p => map.removeLayer(p));
+                        creationPolylines = [];
+                        const polyline = L.polyline(routePoints, {
+                            color: '#28a745', weight: 5, opacity: 0.8
+                        }).addTo(map);
+                        creationPolylines.push(polyline);
+
+                        // Add start/end markers
+                        cleanupCreationMarkers();
+                        addCreationMarker(waypoints[0], 'S');
+                        addCreationMarker(waypoints[waypoints.length - 1], 'E');
+
+                        updateCreationStats();
+                        document.getElementById('finishRouteBtn').disabled = false;
+                    }
+                } catch (err) {
+                    console.error('Freehand routing error:', err);
+                }
+                document.getElementById('creationInstructions').textContent = modeInstructions.freehand;
+            };
+
+            container.addEventListener('mousedown', _freehandDownHandler);
+            container.addEventListener('mousemove', _freehandMoveHandler);
+            container.addEventListener('mouseup', _freehandUpHandler);
+            container.addEventListener('touchstart', _freehandDownHandler, { passive: false });
+            container.addEventListener('touchmove', _freehandMoveHandler, { passive: false });
+            container.addEventListener('touchend', _freehandUpHandler);
+        }
+
+        function removeFreehandListeners() {
+            freehandDrawing = false;
+            const container = map.getContainer();
+            if (_freehandDownHandler) container.removeEventListener('mousedown', _freehandDownHandler);
+            if (_freehandMoveHandler) container.removeEventListener('mousemove', _freehandMoveHandler);
+            if (_freehandUpHandler) container.removeEventListener('mouseup', _freehandUpHandler);
+            if (_freehandDownHandler) container.removeEventListener('touchstart', _freehandDownHandler);
+            if (_freehandMoveHandler) container.removeEventListener('touchmove', _freehandMoveHandler);
+            if (_freehandUpHandler) container.removeEventListener('touchend', _freehandUpHandler);
+            _freehandDownHandler = null;
+            _freehandMoveHandler = null;
+            _freehandUpHandler = null;
+            map.dragging.enable();
+        }
+
+        function cleanupCreationMarkers() {
+            creationMarkers.forEach(m => map.removeLayer(m));
+            creationMarkers = [];
+        }
+
+        function finishRouteCreation() {
+            const allPoints = creationRouteSegments.flat();
+            if (allPoints.length === 0) return;
+
+            const name = document.getElementById('newRouteName').value.trim() || `Ny rute ${routes.length + 1}`;
+
+            const newRoute = {
+                name: name,
+                points: allPoints,
+                originalPoints: [...allPoints],
+                start: allPoints[0],
+                end: allPoints[allPoints.length - 1],
+                avgLat: allPoints.reduce((sum, p) => sum + p[0], 0) / allPoints.length,
+                active: true,
+                detours: []
+            };
+
+            routes.push(newRoute);
+            routes.sort((a, b) => a.avgLat - b.avgLat);
+
+            cleanupCreationLayers();
+            removeFreehandListeners();
+            isCreatingRoute = false;
+            document.getElementById('routeCreationPanel').classList.remove('active');
+
+            displayRoutes();
+            updateStats();
+            showRoutesOnMap();
+
+            document.getElementById('showRoutesBtn').disabled = false;
+            document.getElementById('editModeBtn').disabled = false;
+            document.getElementById('generateBtn').disabled = false;
+
+            saveState();
+        }
+
+        // =============================================
+        // Funksjon 2: Automatisk lagring (localStorage)
+        // =============================================
+        function saveState() {
+            try {
+                const state = {
+                    routes: routes.map(r => ({
+                        name: r.name,
+                        points: r.points,
+                        originalPoints: r.originalPoints,
+                        start: r.start,
+                        end: r.end,
+                        avgLat: r.avgLat,
+                        active: r.active,
+                        detours: (r.detours || []).map(d => ({
+                            splitPoint: d.splitPoint,
+                            rejoinPoint: d.rejoinPoint,
+                            destination: d.destination,
+                            routeToDetour: d.routeToDetour,
+                            routeFromDetour: d.routeFromDetour,
+                            splitIndex: d.splitIndex,
+                            rejoinIndex: d.rejoinIndex
+                        }))
+                    })),
+                    connections: connections.map(c => ({
+                        routePoints: c.routePoints,
+                        originalPoints: c.originalPoints,
+                        distance: c.distance,
+                        detours: (c.detours || []).map(d => ({
+                            splitPoint: d.splitPoint,
+                            rejoinPoint: d.rejoinPoint,
+                            destination: d.destination,
+                            routeToDetour: d.routeToDetour,
+                            routeFromDetour: d.routeFromDetour,
+                            splitIndex: d.splitIndex,
+                            rejoinIndex: d.rejoinIndex
+                        })),
+                        alternativeRoutes: c.alternativeRoutes
+                    })),
+                    mapView: {
+                        center: map.getCenter(),
+                        zoom: map.getZoom()
+                    }
+                };
+                localStorage.setItem('driveplan_state', JSON.stringify(state));
+            } catch (e) {
+                console.warn('Kunne ikke lagre tilstand:', e);
+            }
+        }
+
+        function loadState() {
+            try {
+                const saved = localStorage.getItem('driveplan_state');
+                if (!saved) return false;
+
+                const state = JSON.parse(saved);
+                if (!state.routes || state.routes.length === 0) return false;
+
+                routes = state.routes.map(r => ({
+                    name: r.name,
+                    points: r.points,
+                    originalPoints: r.originalPoints,
+                    start: r.start,
+                    end: r.end,
+                    avgLat: r.avgLat,
+                    active: r.active,
+                    detours: r.detours || []
+                }));
+
+                connections = (state.connections || []).map(c => ({
+                    routePoints: c.routePoints,
+                    originalPoints: c.originalPoints,
+                    distance: c.distance,
+                    detours: c.detours || [],
+                    alternativeRoutes: c.alternativeRoutes || []
+                }));
+
+                if (state.mapView) {
+                    map.setView([state.mapView.center.lat, state.mapView.center.lng], state.mapView.zoom);
+                    map._initialZoomDone = true; // Forhindre at showRoutesOnMap overskriver kartutsnitt
+                }
+
+                displayRoutes();
+                updateStats();
+                showRoutesOnMap();
+                if (connections.length > 0) showConnectionsOnMap();
+
+                document.getElementById('showRoutesBtn').disabled = false;
+                document.getElementById('editModeBtn').disabled = false;
+                document.getElementById('generateBtn').disabled = false;
+
+                document.getElementById('restoredBanner').style.display = 'flex';
+
+                return true;
+            } catch (e) {
+                console.warn('Kunne ikke laste tilstand:', e);
+                return false;
+            }
+        }
+
+        function clearSavedState() {
+            localStorage.removeItem('driveplan_state');
+            routes = [];
+            connections = [];
+            routeLayers.forEach(l => map.removeLayer(l));
+            connectionLayers.forEach(l => map.removeLayer(l));
+            detourLayers.forEach(l => map.removeLayer(l));
+            detourMarkers.forEach(m => map.removeLayer(m));
+            routeLayers = [];
+            connectionLayers = [];
+            detourLayers = [];
+            detourMarkers = [];
+            displayRoutes();
+            updateStats();
+            document.getElementById('restoredBanner').style.display = 'none';
+            document.getElementById('showRoutesBtn').disabled = true;
+            document.getElementById('editModeBtn').disabled = true;
+            document.getElementById('generateBtn').disabled = true;
+            document.getElementById('downloadBtn').disabled = true;
+            document.getElementById('generatedInfo').style.display = 'none';
+            document.getElementById('progress').style.display = 'none';
+            finalGPX = null;
+            map.setView([65, 13], 5);
+        }
+
+        // Last inn lagret tilstand ved oppstart
+        loadState();
 
         // Oppdater map størrelse når orientation endres
         window.addEventListener('orientationchange', function() {
