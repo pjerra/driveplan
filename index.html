@@ -1418,8 +1418,8 @@
 
         async function addRouteDetour(destinationLatlng) {
             const route = routes[selectedRouteForEdit];
-            const splitPoint = findNearestPointOnRoute(route.points, clickedPoint);
-            const rejoinPoint = findPointAheadOnRoute(route.points, splitPoint, 20);
+            const splitPoint = findNearestPointOnRoute(route.originalPoints, clickedPoint);
+            const rejoinPoint = findPointAheadOnRoute(route.originalPoints, splitPoint, 20);
             
             document.getElementById('editInstructions').innerHTML = '⏳ Beregner rute...';
             
@@ -1452,9 +1452,10 @@
         async function addConnectionDetour(destinationLatlng) {
             const conn = connections[selectedConnectionForEdit];
             if (!conn.detours) conn.detours = [];
-            
-            const splitPoint = findNearestPointOnRoute(conn.routePoints, clickedPoint);
-            const rejoinPoint = findPointAheadOnRoute(conn.routePoints, splitPoint, 20);
+            if (!conn.originalPoints) conn.originalPoints = [...conn.routePoints];
+
+            const splitPoint = findNearestPointOnRoute(conn.originalPoints, clickedPoint);
+            const rejoinPoint = findPointAheadOnRoute(conn.originalPoints, splitPoint, 20);
             
             document.getElementById('editInstructions').innerHTML = '⏳ Beregner omvei...';
             
