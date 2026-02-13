@@ -1516,32 +1516,48 @@
             document.getElementById('totalPoints').textContent = totalPoints.toLocaleString();
             document.getElementById('detourCount').textContent = totalDetours;
 
-            // Total duration from connections
+            // Calculate route distances from points
+            let routeDistanceM = 0;
+            activeRoutes.forEach(r => {
+                for (let i = 1; i < r.points.length; i++) {
+                    routeDistanceM += map.distance(
+                        L.latLng(r.points[i-1][0], r.points[i-1][1]),
+                        L.latLng(r.points[i][0], r.points[i][1])
+                    );
+                }
+            });
+            const connDistance = connections.reduce((sum, c) => sum + (c.distance || 0), 0);
+            const totalDistKm = (routeDistanceM / 1000) + connDistance;
+
+            if (totalDistKm > 0) {
+                document.getElementById('totalDistance').textContent = Math.round(totalDistKm) + ' km';
+            } else {
+                document.getElementById('totalDistance').textContent = '-';
+            }
+
+            // Estimated duration: assume avg 60 km/h for routes, use OSRM duration for connections
             const connDuration = connections.reduce((sum, c) => sum + (c.duration || 0), 0);
-            if (connDuration > 0) {
-                const hours = Math.floor(connDuration / 60);
-                const mins = connDuration % 60;
+            const routeDurationMin = (routeDistanceM / 1000) / 60 * 60; // km / 60km/h * 60min
+            const totalDuration = Math.round(routeDurationMin + connDuration);
+            if (totalDuration > 0) {
+                const hours = Math.floor(totalDuration / 60);
+                const mins = totalDuration % 60;
                 let durationText = hours > 0 ? `${hours} t ${mins} min` : `${mins} min`;
-                const breaks = Math.floor(connDuration / 120);
+                const breaks = Math.floor(totalDuration / 120);
                 if (breaks > 0) durationText += ` (${breaks} pause${breaks > 1 ? 'r' : ''})`;
                 document.getElementById('totalDuration').textContent = durationText;
             } else {
                 document.getElementById('totalDuration').textContent = '-';
             }
 
-            // Total distance
-            const connDistance = connections.reduce((sum, c) => sum + (c.distance || 0), 0);
-            if (connDistance > 0) {
-                document.getElementById('totalDistance').textContent = connDistance.toFixed(0) + ' km';
-            } else {
-                document.getElementById('totalDistance').textContent = '-';
-            }
-
-            // Curvature score
+            // Curvature score - average angle change per sampled segment
             const allActivePoints = activeRoutes.flatMap(r => r.points);
             if (allActivePoints.length > 10) {
                 const score = getCurvatureScore(allActivePoints);
-                const normalizedScore = Math.min(score / allActivePoints.length * 100, 100).toFixed(0);
+                const sampled = compressPoints(allActivePoints, Math.min(allActivePoints.length, 500));
+                // Average degrees per segment, scale to 0-100 (15+ deg avg = max twisty)
+                const avgAngle = score / Math.max(sampled.length - 2, 1);
+                const normalizedScore = Math.min(Math.round(avgAngle / 15 * 100), 100);
                 document.getElementById('curvatureScore').textContent = normalizedScore + ' / 100';
                 document.getElementById('curvatureLegend').style.display = 'flex';
             } else {
@@ -1588,6 +1604,13 @@
                 const group = L.featureGroup(allLayers);
                 map.fitBounds(group.getBounds().pad(0.1));
                 map._initialZoomDone = true;
+            }
+
+            // Oppdater analyse-funksjoner når ruter vises
+            if (routes.filter(r => r.active).length > 0) {
+                showCurvatureOverlay();
+                fetchElevationProfile();
+                calculateDayStages();
             }
         }
 
@@ -2568,8 +2591,8 @@
                 attraction: '⭐'
             };
 
-            const aroundClauses = samplePoints.map(p => `(around:5000,${p[0]},${p[1]})`).join('');
-            const query = `[out:json][timeout:25];(node[${tagMap[type]}]${aroundClauses};);out body 100;`;
+            const nodeQueries = samplePoints.map(p => `node[${tagMap[type]}](around:5000,${p[0]},${p[1]})`).join(';');
+            const query = `[out:json][timeout:25];(${nodeQueries};);out body 200;`;
 
             const data = await queryOverpass(query);
             if (!data || !data.elements) return;
