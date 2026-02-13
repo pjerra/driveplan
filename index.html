@@ -126,10 +126,11 @@
         }
         
         .sidebar-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
             color: white;
             padding: 20px;
             flex-shrink: 0;
+            position: relative;
         }
         
         @media (max-width: 768px) {
@@ -222,18 +223,10 @@
             }
         }
         
-        .file-upload {
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            border: 2px dashed #667eea;
-        }
-        
         .file-label {
             display: block;
             padding: 14px 20px;
-            background: #667eea;
+            background: #3b82f6;
             color: white;
             text-align: center;
             border-radius: 6px;
@@ -286,8 +279,8 @@
         }
         
         .route-card.inactive {
-            border-color: #dc3545;
-            background: #fff5f5;
+            border-color: #d1d5db;
+            background: #f9fafb;
         }
         
         .route-card.has-detours {
@@ -302,7 +295,7 @@
         }
         
         .route-number {
-            background: #667eea;
+            background: #3b82f6;
             color: white;
             min-width: 32px;
             height: 32px;
@@ -477,7 +470,7 @@
         button {
             width: 100%;
             padding: 16px;
-            background: #667eea;
+            background: #3b82f6;
             color: white;
             border: none;
             border-radius: 8px;
@@ -515,34 +508,19 @@
         }
         
         button.secondary {
-            background: #28a745;
+            background: transparent;
+            color: #28a745;
+            border: 2px solid #28a745;
         }
-        
+
         button.danger {
-            background: #dc3545;
+            background: transparent;
+            color: #64748b;
+            border: 2px solid #cbd5e1;
         }
         
         .stats {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
             font-size: 14px;
-        }
-        
-        .stats-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .stats-label {
-            color: #6c757d;
-        }
-        
-        .stats-value {
-            font-weight: 600;
-            color: #2c3e50;
         }
         
         .progress {
@@ -563,7 +541,7 @@
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
             width: 0%;
             transition: width 0.3s;
             display: flex;
@@ -843,17 +821,6 @@
         }
 
         /* POI Toggle buttons */
-        .poi-toggles {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .poi-toggles h4 {
-            font-size: 13px;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
         .poi-toggle-row {
             display: flex;
             flex-wrap: wrap;
@@ -873,9 +840,9 @@
             font-weight: 500;
         }
         .poi-toggle.active {
-            border-color: #28a745;
-            background: #d4edda;
-            color: #155724;
+            border-color: #3b82f6;
+            background: #eff6ff;
+            color: #1d4ed8;
         }
         .poi-toggle.loading {
             opacity: 0.7;
@@ -960,7 +927,7 @@
             border-radius: 6px;
             margin-bottom: 6px;
             font-size: 12px;
-            border-left: 3px solid #667eea;
+            border-left: 3px solid #3b82f6;
         }
         .day-stage-item .stage-label {
             font-weight: 600;
@@ -972,7 +939,7 @@
 
         /* Drag and drop */
         .route-card.drag-over {
-            border-color: #667eea;
+            border-color: #3b82f6;
             border-style: dashed;
             background: #e8f0fe;
         }
@@ -990,62 +957,7 @@
             cursor: grabbing;
         }
 
-        /* Share panel */
-        .share-panel {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        .share-panel h4 {
-            font-size: 13px;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-        .share-panel .share-actions {
-            display: flex;
-            gap: 6px;
-        }
-        .share-panel button {
-            flex: 1;
-            padding: 10px;
-            font-size: 13px;
-            margin-bottom: 0;
-        }
-
         /* Import panel */
-        .import-panel {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            border: 2px dashed #667eea;
-        }
-        .import-panel h4 {
-            font-size: 13px;
-            color: #2c3e50;
-            margin-bottom: 8px;
-        }
-        .import-panel input[type="text"] {
-            display: block;
-            width: 100%;
-            padding: 10px 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 6px;
-            font-size: 13px;
-            margin-bottom: 8px;
-            font-family: inherit;
-        }
-        .import-panel input[type="text"]:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        .import-panel button {
-            padding: 10px;
-            font-size: 13px;
-            margin-bottom: 0;
-        }
-
         /* Reverse button */
         .reverse-btn {
             background: none;
@@ -1073,6 +985,171 @@
             border-radius: 8px !important;
             box-shadow: 0 2px 10px rgba(0,0,0,0.2) !important;
         }
+
+        /* Collapsible sections */
+        .collapsible-section {
+            margin-bottom: 12px;
+        }
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #f1f5f9;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #334155;
+            transition: background 0.2s;
+        }
+        .section-header:hover {
+            background: #e2e8f0;
+        }
+        .section-header .chevron {
+            font-size: 12px;
+            transition: transform 0.3s;
+            color: #94a3b8;
+        }
+        .collapsible-section.collapsed .chevron {
+            transform: rotate(-90deg);
+        }
+        .section-body {
+            max-height: 2000px;
+            overflow: hidden;
+            transition: max-height 0.35s ease, opacity 0.25s ease, padding 0.35s ease;
+            opacity: 1;
+            padding-top: 10px;
+        }
+        .collapsible-section.collapsed .section-body {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0;
+        }
+
+        /* Stats grid */
+        .stats-grid-primary {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 8px;
+            padding: 12px 8px;
+            text-align: center;
+            border: 1px solid #e2e8f0;
+        }
+        .stat-card .stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.2;
+        }
+        .stat-card .stat-label {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .stats-secondary {
+            font-size: 12px;
+            color: #64748b;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 12px;
+            padding: 4px 0;
+        }
+        .stats-secondary span {
+            white-space: nowrap;
+        }
+
+        /* Controls 2x2 grid */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        .controls-grid button {
+            margin-bottom: 0;
+            padding: 12px 8px;
+            font-size: 14px;
+        }
+
+        /* Help tooltip */
+        .help-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .help-tooltip {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: #1e293b;
+            color: #e2e8f0;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.6;
+            width: 220px;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .help-icon:hover .help-tooltip,
+        .help-icon:focus .help-tooltip {
+            display: block;
+        }
+        .help-tooltip::before {
+            content: '';
+            position: absolute;
+            top: -6px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            background: #1e293b;
+            transform: rotate(45deg);
+        }
+
+        /* Import section compact */
+        .import-compact {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+        .import-compact .file-label,
+        .import-compact .new-route-btn {
+            flex: 1;
+            margin: 0;
+            padding: 12px 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+        .import-compact .new-route-btn {
+            margin-top: 0;
+        }
+
+        /* Route card distance badge */
+        .route-distance {
+            font-size: 11px;
+            color: #3b82f6;
+            font-weight: 600;
+            margin-left: 8px;
+        }
     </style>
 </head>
 <body>
@@ -1096,8 +1173,18 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <button class="close-sidebar-btn" onclick="closeSidebar()" aria-label="Lukk">×</button>
-            <h1>🏍️ Motorsykkelrute Planlegger</h1>
-            <p>Klikk på ruten for å zoome • Dra punkter for å redigere</p>
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <h1>🏍️ Ruteplanlegger</h1>
+                <div class="help-icon" tabindex="0">?
+                    <div class="help-tooltip">
+                        💡 <strong>Slik bruker du:</strong><br>
+                        • Klikk på rute → zoom til rute<br>
+                        • Klikk på kart → legg til omvei<br>
+                        • Dra punkter for å justere
+                    </div>
+                </div>
+            </div>
+            <p>Planlegg motorsykkelruter enkelt</p>
         </div>
 
         <div class="edit-mode-banner" id="editModeBanner">
@@ -1111,17 +1198,22 @@
                 <button onclick="clearSavedState()">Start på nytt</button>
             </div>
 
-            <div class="file-upload">
-                <label for="gpxFiles" class="file-label">📁 Last opp GPX-filer</label>
-                <input type="file" id="gpxFiles" multiple accept=".gpx">
-                <div id="fileCount" style="margin-top:10px; font-size:13px; color:#6c757d; text-align:center;"></div>
-                <button class="new-route-btn" onclick="openRouteCreation()">+ Ny rute</button>
-            </div>
-
-            <div class="import-panel">
-                <h4>🌍 Importer fra Google Maps</h4>
-                <input type="text" id="googleMapsUrl" placeholder="Lim inn Google Maps-lenke...">
-                <button onclick="importFromGoogleMaps()">Importer rute</button>
+            <!-- Importer -->
+            <div class="collapsible-section" id="section-import">
+                <div class="section-header" onclick="toggleSection('import')">
+                    <span>📁 Importer</span>
+                    <span class="chevron">▾</span>
+                </div>
+                <div class="section-body">
+                    <div class="import-compact">
+                        <label for="gpxFiles" class="file-label">📁 Last opp GPX</label>
+                        <button class="new-route-btn" onclick="openRouteCreation()">+ Ny rute</button>
+                    </div>
+                    <input type="file" id="gpxFiles" multiple accept=".gpx">
+                    <div id="fileCount" style="font-size:13px; color:#6c757d; text-align:center; margin-bottom:8px;"></div>
+                    <input type="text" id="googleMapsUrl" placeholder="Lim inn Google Maps-lenke..." style="display:block; width:100%; padding:10px 12px; border:2px solid #e9ecef; border-radius:6px; font-size:13px; margin-bottom:8px; font-family:inherit;">
+                    <button onclick="importFromGoogleMaps()" style="padding:10px; font-size:13px; margin-bottom:0;">🌍 Importer fra Google Maps</button>
+                </div>
             </div>
 
             <div id="routeCreationPanel" class="route-creation-panel">
@@ -1142,87 +1234,105 @@
                 </div>
             </div>
 
-            <div class="info-box">
-                💡 <strong>Slik redigerer du:</strong><br>
-                • Klikk på rute → zoom til rute<br>
-                • Klikk på kart → legg til omvei<br>
-                • Dra punkter for å justere
-            </div>
-
             <div class="warning-box" id="editInstructions" style="display:none;">
                 📍 Klikk på kartet der du vil kjøre innom.
             </div>
 
-            <div id="routesList"></div>
-
-            <div class="poi-toggles" id="poiToggles">
-                <h4>📍 Vis langs ruten</h4>
-                <div class="poi-toggle-row">
-                    <button class="poi-toggle" data-poi="fuel" onclick="togglePOI('fuel')">⛽ Bensin</button>
-                    <button class="poi-toggle" data-poi="viewpoint" onclick="togglePOI('viewpoint')">🏔️ Utsikt</button>
-                    <button class="poi-toggle" data-poi="parking" onclick="togglePOI('parking')">🅿️ Raste</button>
-                    <button class="poi-toggle" data-poi="attraction" onclick="togglePOI('attraction')">⭐ Severdighet</button>
-                    <button class="poi-toggle" data-poi="camping" onclick="togglePOI('camping')">🏕️ Camping</button>
-                    <button class="poi-toggle" data-poi="hotel" onclick="togglePOI('hotel')">🏨 Overnatting</button>
+            <!-- Ruter -->
+            <div class="collapsible-section" id="section-routes">
+                <div class="section-header" onclick="toggleSection('routes')">
+                    <span>🛣️ Ruter</span>
+                    <span class="chevron">▾</span>
+                </div>
+                <div class="section-body">
+                    <div id="routesList"></div>
                 </div>
             </div>
 
-            <div id="stats" class="stats">
-                <div class="stats-row">
-                    <span class="stats-label">Aktive ruter:</span>
-                    <span class="stats-value" id="activeCount">0 / 0</span>
+            <!-- Langs ruten -->
+            <div class="collapsible-section collapsed" id="section-poi">
+                <div class="section-header" onclick="toggleSection('poi')">
+                    <span>📍 Langs ruten</span>
+                    <span class="chevron">▾</span>
                 </div>
-                <div class="stats-row">
-                    <span class="stats-label">Omveier:</span>
-                    <span class="stats-value" id="detourCount">0</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">GPS-punkter:</span>
-                    <span class="stats-value" id="totalPoints">0</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">Snittfart:</span>
-                    <span class="stats-value"><input type="number" id="avgSpeedInput" value="60" min="20" max="200" style="width:50px; padding:2px 4px; border:1px solid #ccc; border-radius:4px; font-size:13px; text-align:center;" onchange="updateStats()"> km/t</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">Estimert kjøretid:</span>
-                    <span class="stats-value" id="totalDuration">-</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">Total distanse:</span>
-                    <span class="stats-value" id="totalDistance">-</span>
-                </div>
-                <div class="stats-row">
-                    <span class="stats-label">Svingete-score:</span>
-                    <span class="stats-value" id="curvatureScore">-</span>
-                </div>
-                <div class="curvature-legend" id="curvatureLegend" style="display:none;">
-                    <span>Rett</span>
-                    <div class="curvature-bar"></div>
-                    <span>Svingete</span>
+                <div class="section-body">
+                    <div class="poi-toggle-row">
+                        <button class="poi-toggle" data-poi="fuel" onclick="togglePOI('fuel')">⛽ Bensin</button>
+                        <button class="poi-toggle" data-poi="viewpoint" onclick="togglePOI('viewpoint')">🏔️ Utsikt</button>
+                        <button class="poi-toggle" data-poi="parking" onclick="togglePOI('parking')">🅿️ Raste</button>
+                        <button class="poi-toggle" data-poi="attraction" onclick="togglePOI('attraction')">⭐ Severdighet</button>
+                        <button class="poi-toggle" data-poi="camping" onclick="togglePOI('camping')">🏕️ Camping</button>
+                        <button class="poi-toggle" data-poi="hotel" onclick="togglePOI('hotel')">🏨 Overnatting</button>
+                    </div>
                 </div>
             </div>
 
-            <div id="elevationChart" class="elevation-chart" style="display:none;">
-                <h4>📈 Høydeprofil</h4>
-                <canvas id="elevationCanvas"></canvas>
-                <div class="elev-stats">
-                    <span id="elevMin">Min: -</span>
-                    <span id="elevMax">Maks: -</span>
-                    <span id="elevGain">Stigning: -</span>
+            <!-- Statistikk -->
+            <div class="collapsible-section" id="section-stats">
+                <div class="section-header" onclick="toggleSection('stats')">
+                    <span>📊 Statistikk</span>
+                    <span class="chevron">▾</span>
+                </div>
+                <div class="section-body">
+                    <div id="stats" class="stats" style="padding:0; background:none; margin-bottom:0;">
+                        <div class="stats-grid-primary">
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalDistance">-</div>
+                                <div class="stat-label">distanse</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalDuration">-</div>
+                                <div class="stat-label">kjøretid</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="curvatureScore">-</div>
+                                <div class="stat-label">svinger</div>
+                            </div>
+                        </div>
+                        <div class="curvature-legend" id="curvatureLegend" style="display:none;">
+                            <span>Rett</span>
+                            <div class="curvature-bar"></div>
+                            <span>Svingete</span>
+                        </div>
+                        <div class="stats-secondary">
+                            <span id="activeCount">0 / 0 ruter</span>
+                            <span>•</span>
+                            <span id="detourCount">0 omveier</span>
+                            <span>•</span>
+                            <span id="totalPoints">0 punkter</span>
+                            <span>•</span>
+                            <span><input type="number" id="avgSpeedInput" value="60" min="20" max="200" style="width:40px; padding:1px 3px; border:1px solid #ccc; border-radius:4px; font-size:12px; text-align:center;" onchange="updateStats()"> km/t</span>
+                        </div>
+                    </div>
+
+                    <div id="elevationChart" class="elevation-chart" style="display:none;">
+                        <h4>📈 Høydeprofil</h4>
+                        <canvas id="elevationCanvas"></canvas>
+                        <div class="elev-stats">
+                            <span id="elevMin">Min: -</span>
+                            <span id="elevMax">Maks: -</span>
+                            <span id="elevGain">Stigning: -</span>
+                        </div>
+                    </div>
+
+                    <div id="dayStages" class="day-stages" style="display:none;">
+                        <h4>🏕️ Dagsetapper (~300 km/dag)</h4>
+                        <div id="dayStagesList"></div>
+                    </div>
                 </div>
             </div>
 
-            <div id="dayStages" class="day-stages" style="display:none;">
-                <h4>🏕️ Dagsetapper (~300 km/dag)</h4>
-                <div id="dayStagesList"></div>
-            </div>
-
-            <div class="share-panel">
-                <h4>🔗 Del rute</h4>
-                <div class="share-actions">
-                    <button onclick="shareRouteLink()">Kopier lenke</button>
-                    <button onclick="shareGPXClipboard()" class="secondary">Kopier GPX</button>
+            <!-- Del -->
+            <div class="collapsible-section collapsed" id="section-share">
+                <div class="section-header" onclick="toggleSection('share')">
+                    <span>🔗 Del</span>
+                    <span class="chevron">▾</span>
+                </div>
+                <div class="section-body">
+                    <div class="share-actions" style="display:flex; gap:6px;">
+                        <button onclick="shareRouteLink()" style="flex:1; padding:10px; font-size:13px; margin-bottom:0;">Kopier lenke</button>
+                        <button onclick="shareGPXClipboard()" class="secondary" style="flex:1; padding:10px; font-size:13px; margin-bottom:0;">Kopier GPX</button>
+                    </div>
                 </div>
             </div>
 
@@ -1241,18 +1351,20 @@
         </div>
 
         <div class="controls">
-            <button id="showRoutesBtn" onclick="showRoutesOnMap()" disabled>
-                🗺️ Vis alle ruter
-            </button>
-            <button id="editModeBtn" class="edit-mode" onclick="toggleEditMode()" disabled>
-                ✏️ Redigeringsmodus
-            </button>
-            <button id="generateBtn" class="secondary" onclick="generateRoute()" disabled>
-                🚀 Generer rute
-            </button>
-            <button id="downloadBtn" class="danger" onclick="downloadGPX()" disabled>
-                💾 Last ned GPX
-            </button>
+            <div class="controls-grid">
+                <button id="showRoutesBtn" onclick="showRoutesOnMap()" disabled>
+                    🗺️ Vis ruter
+                </button>
+                <button id="editModeBtn" class="edit-mode" onclick="toggleEditMode()" disabled>
+                    ✏️ Rediger
+                </button>
+                <button id="generateBtn" class="secondary" onclick="generateRoute()" disabled>
+                    🚀 Generer
+                </button>
+                <button id="downloadBtn" class="danger" onclick="downloadGPX()" disabled>
+                    💾 Last ned
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1294,6 +1406,11 @@
         let finalGPX = null;
         let currentAltRoutesContext = null;
         let isMobile = window.innerWidth <= 768;
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById('section-' + sectionId);
+            if (section) section.classList.toggle('collapsed');
+        }
 
         // Oppdater isMobile ved vindustørrelse endring
         window.addEventListener('resize', () => {
@@ -1478,11 +1595,22 @@
                     detoursHTML += '</div>';
                 }
 
+                // Calculate route distance
+                let routeDistM = 0;
+                for (let i = 1; i < route.points.length; i++) {
+                    routeDistM += map.distance(
+                        L.latLng(route.points[i-1][0], route.points[i-1][1]),
+                        L.latLng(route.points[i][0], route.points[i][1])
+                    );
+                }
+                const routeDistKm = Math.round(routeDistM / 1000);
+
                 card.innerHTML = `
                     <div class="route-header">
                         <span class="drag-handle" title="Dra for å endre rekkefølge">☰</span>
                         <span class="route-number">${index + 1}</span>
                         <span class="route-name">${route.name}</span>
+                        ${routeDistKm > 0 ? `<span class="route-distance">${routeDistKm} km</span>` : ''}
                         <button class="reverse-btn" onclick="event.stopPropagation(); reverseRoute(${index})" title="Reverser rute">↕</button>
                         <div class="route-toggle ${route.active ? 'active' : ''}" onclick="event.stopPropagation(); toggleRoute(${index})"></div>
                     </div>
@@ -1520,7 +1648,7 @@
                 instructions.style.display = 'block';
             } else {
                 btn.classList.remove('active');
-                btn.textContent = '✏️ Redigeringsmodus';
+                btn.textContent = '✏️ Rediger';
                 banner.classList.remove('active');
                 instructions.style.display = 'none';
                 selectedRouteForEdit = null;
@@ -1537,9 +1665,9 @@
             const totalDetours = routes.reduce((sum, r) => sum + (r.detours ? r.detours.length : 0), 0) +
                                connections.reduce((sum, c) => sum + (c.detours ? c.detours.length : 0), 0);
 
-            document.getElementById('activeCount').textContent = activeRoutes.length + ' / ' + routes.length;
-            document.getElementById('totalPoints').textContent = totalPoints.toLocaleString();
-            document.getElementById('detourCount').textContent = totalDetours;
+            document.getElementById('activeCount').textContent = activeRoutes.length + ' / ' + routes.length + ' ruter';
+            document.getElementById('totalPoints').textContent = totalPoints.toLocaleString() + ' punkter';
+            document.getElementById('detourCount').textContent = totalDetours + ' omveier';
 
             // Calculate route distances from points
             let routeDistanceM = 0;
@@ -1568,9 +1696,7 @@
             if (totalDuration > 0) {
                 const hours = Math.floor(totalDuration / 60);
                 const mins = totalDuration % 60;
-                let durationText = hours > 0 ? `${hours} t ${mins} min` : `${mins} min`;
-                const breaks = Math.floor(totalDuration / 120);
-                if (breaks > 0) durationText += ` (${breaks} pause${breaks > 1 ? 'r' : ''})`;
+                let durationText = hours > 0 ? `${hours}t ${mins}m` : `${mins}m`;
                 document.getElementById('totalDuration').textContent = durationText;
             } else {
                 document.getElementById('totalDuration').textContent = '-';
@@ -1584,7 +1710,7 @@
                 // Straight highway ~20 deg/km, mountain pass ~150+ deg/km
                 const degreesPerKm = score / totalDistKm;
                 const normalizedScore = Math.min(Math.round(degreesPerKm / 2), 100);
-                document.getElementById('curvatureScore').textContent = normalizedScore + ' / 100';
+                document.getElementById('curvatureScore').textContent = (normalizedScore / 10).toFixed(1) + '/10';
                 document.getElementById('curvatureLegend').style.display = 'flex';
             } else {
                 document.getElementById('curvatureScore').textContent = '-';
@@ -2384,7 +2510,7 @@
             const marker = L.marker(latlng, {
                 icon: L.divIcon({
                     className: 'custom-marker',
-                    html: `<div style="background:#667eea; color:white; width:${markerSize}px; height:${markerSize}px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px;">${number}</div>`,
+                    html: `<div style="background:#3b82f6; color:white; width:${markerSize}px; height:${markerSize}px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:12px;">${number}</div>`,
                     iconSize: [markerSize, markerSize],
                     iconAnchor: [markerSize / 2, markerSize / 2]
                 })
@@ -2878,7 +3004,7 @@
                 if (i === 0) ctx.moveTo(x, y);
                 else ctx.lineTo(x, y);
             });
-            ctx.strokeStyle = '#667eea';
+            ctx.strokeStyle = '#3b82f6';
             ctx.lineWidth = 2;
             ctx.stroke();
 
@@ -2967,7 +3093,7 @@
                 const marker = L.marker(stage.point, {
                     icon: L.divIcon({
                         className: 'custom-marker',
-                        html: `<div style="background:#667eea; color:white; width:32px; height:32px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:11px;">D${stage.day}</div>`,
+                        html: `<div style="background:#3b82f6; color:white; width:32px; height:32px; border-radius:50%; border:3px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4); display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:11px;">D${stage.day}</div>`,
                         iconSize: [32, 32],
                         iconAnchor: [16, 16]
                     })
