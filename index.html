@@ -2569,6 +2569,54 @@
         // =============================================
         let poiState = { fuel: false, viewpoint: false, parking: false, attraction: false, camping: false, hotel: false };
         let poiLayerGroups = { fuel: L.layerGroup(), viewpoint: L.layerGroup(), parking: L.layerGroup(), attraction: L.layerGroup(), camping: L.layerGroup(), hotel: L.layerGroup() };
+        let poiCache = {}; // Cache: routeHash -> { fuel: [...], viewpoint: [...], ... }
+
+        const poiTagMap = {
+            fuel: '"amenity"="fuel"',
+            viewpoint: '"tourism"="viewpoint"',
+            parking: '"amenity"="parking"',
+            attraction: '"tourism"="attraction"',
+            camping: '"tourism"="camp_site"',
+            hotel: '"tourism"~"hotel|motel|guest_house"'
+        };
+
+        const poiIconMap = {
+            fuel: '⛽',
+            viewpoint: '🏔️',
+            parking: '🅿️',
+            attraction: '⭐',
+            camping: '🏕️',
+            hotel: '🏨'
+        };
+
+        // Generer en hash-nøkkel basert på aktive ruters punkter
+        function getRouteHash() {
+            const activeRoutes = routes.filter(r => r.active);
+            if (activeRoutes.length === 0) return null;
+            const pts = activeRoutes.flatMap(r => [r.points[0], r.points[Math.floor(r.points.length/2)], r.points[r.points.length-1]]);
+            return pts.map(p => `${p[0].toFixed(3)},${p[1].toFixed(3)}`).join('|');
+        }
+
+        // Last POI-cache fra localStorage
+        function loadPoiCache() {
+            try {
+                const cached = localStorage.getItem('poiCache');
+                if (cached) poiCache = JSON.parse(cached);
+            } catch (e) { poiCache = {}; }
+        }
+
+        // Lagre POI-cache til localStorage (behold maks 5 ruter)
+        function savePoiCache() {
+            try {
+                const keys = Object.keys(poiCache);
+                if (keys.length > 5) {
+                    delete poiCache[keys[0]];
+                }
+                localStorage.setItem('poiCache', JSON.stringify(poiCache));
+            } catch (e) { console.warn('Kunne ikke lagre POI-cache'); }
+        }
+
+        loadPoiCache();
 
         function togglePOI(type) {
             poiState[type] = !poiState[type];
@@ -2576,63 +2624,97 @@
             btn.classList.toggle('active', poiState[type]);
 
             if (poiState[type]) {
-                fetchPOIs(type);
+                showPOIsForType(type);
             } else {
                 poiLayerGroups[type].clearLayers();
                 map.removeLayer(poiLayerGroups[type]);
             }
         }
 
-        async function fetchPOIs(type) {
-            const activeRoutes = routes.filter(r => r.active);
-            if (activeRoutes.length === 0) return;
+        function showPOIsForType(type) {
+            const routeHash = getRouteHash();
+            if (!routeHash) return;
 
-            const allPoints = activeRoutes.flatMap(r => r.points);
+            // Sjekk cache først
+            if (poiCache[routeHash] && poiCache[routeHash][type]) {
+                renderPOIs(type, poiCache[routeHash][type]);
+                return;
+            }
 
-            const tagMap = {
-                fuel: '"amenity"="fuel"',
-                viewpoint: '"tourism"="viewpoint"',
-                parking: '"amenity"="parking"',
-                attraction: '"tourism"="attraction"',
-                camping: '"tourism"="camp_site"',
-                hotel: '"tourism"~"hotel|motel|guest_house"'
-            };
+            // Hent fra Overpass
+            fetchPOIsFromOverpass(type, routeHash);
+        }
 
-            const iconMap = {
-                fuel: '⛽',
-                viewpoint: '🏔️',
-                parking: '🅿️',
-                attraction: '⭐',
-                camping: '🏕️',
-                hotel: '🏨'
-            };
-
-            // Bruk around-queries med 10 samplepunkter langs ruten
-            const samplePts = compressPoints(allPoints, 10);
-            const unions = samplePts.map(p => `node[${tagMap[type]}](around:8000,${p[0]},${p[1]})`).join(';');
-            const query = `[out:json][timeout:25];(${unions};);out body 300;`;
-
-            const data = await queryOverpass(query);
-            if (!data || !data.elements) return;
-
+        function renderPOIs(type, elements) {
             poiLayerGroups[type].clearLayers();
 
-            data.elements.forEach(el => {
+            elements.forEach(el => {
                 if (!el.lat || !el.lon) return;
                 const marker = L.marker([el.lat, el.lon], {
                     icon: L.divIcon({
                         className: 'custom-marker',
-                        html: `<div style="font-size:18px; text-align:center; line-height:1;">${iconMap[type]}</div>`,
+                        html: `<div style="font-size:18px; text-align:center; line-height:1;">${poiIconMap[type]}</div>`,
                         iconSize: [24, 24],
                         iconAnchor: [12, 12]
                     })
                 });
-                const name = el.tags?.name || type;
-                marker.bindPopup(`<strong>${iconMap[type]} ${name}</strong>`);
+                const name = el.name || type;
+                marker.bindPopup(`<strong>${poiIconMap[type]} ${name}</strong>`);
                 poiLayerGroups[type].addLayer(marker);
             });
 
             poiLayerGroups[type].addTo(map);
+        }
+
+        // Kø for Overpass-forespørsler med forsinkelse
+        let poiQueue = [];
+        let poiQueueRunning = false;
+
+        async function fetchPOIsFromOverpass(type, routeHash) {
+            poiQueue.push({ type, routeHash });
+            if (!poiQueueRunning) processPoiQueue();
+        }
+
+        async function processPoiQueue() {
+            if (poiQueue.length === 0) { poiQueueRunning = false; return; }
+            poiQueueRunning = true;
+
+            const { type, routeHash } = poiQueue.shift();
+
+            // Dobbeltsjekk at POI-typen fortsatt er aktiv
+            if (!poiState[type]) {
+                processPoiQueue();
+                return;
+            }
+
+            const activeRoutes = routes.filter(r => r.active);
+            if (activeRoutes.length === 0) { processPoiQueue(); return; }
+
+            const allPoints = activeRoutes.flatMap(r => r.points);
+            const samplePts = compressPoints(allPoints, 10);
+            const unions = samplePts.map(p => `node[${poiTagMap[type]}](around:8000,${p[0]},${p[1]})`).join(';');
+            const query = `[out:json][timeout:25];(${unions};);out body 300;`;
+
+            const data = await queryOverpass(query);
+
+            if (data && data.elements) {
+                // Lagre i cache (bare lat, lon, name for å spare plass)
+                const simplified = data.elements
+                    .filter(el => el.lat && el.lon)
+                    .map(el => ({ lat: el.lat, lon: el.lon, name: el.tags?.name || '' }));
+
+                if (!poiCache[routeHash]) poiCache[routeHash] = {};
+                poiCache[routeHash][type] = simplified;
+                savePoiCache();
+
+                if (poiState[type]) {
+                    renderPOIs(type, simplified);
+                }
+            }
+
+            // Vent 1.5 sekunder før neste forespørsel (unngå rate-limiting)
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            processPoiQueue();
         }
 
         // =============================================
