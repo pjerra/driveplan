@@ -2551,7 +2551,13 @@
             const url = 'https://overpass-api.de/api/interpreter?data=' + encodeURIComponent(query);
             try {
                 const response = await fetch(url);
-                return await response.json();
+                const text = await response.text();
+                try {
+                    return JSON.parse(text);
+                } catch {
+                    console.warn('Overpass returned non-JSON (rate limited?):', text.substring(0, 200));
+                    return null;
+                }
             } catch (e) {
                 console.error('Overpass error:', e);
                 return null;
@@ -2601,12 +2607,10 @@
                 hotel: '🏨'
             };
 
-            // Bruk bbox rundt alle rutepunkter med 5km margin
-            const lats = allPoints.map(p => p[0]);
-            const lons = allPoints.map(p => p[1]);
-            const margin = 0.05; // ~5km
-            const bbox = `${Math.min(...lats) - margin},${Math.min(...lons) - margin},${Math.max(...lats) + margin},${Math.max(...lons) + margin}`;
-            const query = `[out:json][timeout:25][bbox:${bbox}];node[${tagMap[type]}];out body 300;`;
+            // Bruk around-queries med 10 samplepunkter langs ruten
+            const samplePts = compressPoints(allPoints, 10);
+            const unions = samplePts.map(p => `node[${tagMap[type]}](around:8000,${p[0]},${p[1]})`).join(';');
+            const query = `[out:json][timeout:25];(${unions};);out body 300;`;
 
             const data = await queryOverpass(query);
             if (!data || !data.elements) return;
